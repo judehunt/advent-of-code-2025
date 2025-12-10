@@ -4,7 +4,7 @@ def load_data(file_path):
     return [line.strip() for line in data]
 
 def find_largest_joltage(bank):
-    # Get the maximum joltage from the bank (exluding the last element)
+    # Get the maximum joltage from the bank (excluding the last element)
     max_joltage = max(bank[:-1])
     # Find the index of the maximum joltage
     max_index = bank.index(max_joltage)
@@ -14,7 +14,6 @@ def find_largest_joltage(bank):
     # Find the maximum in the subsequence
     max_sub_joltage = max(subsequence)
     total_max_joltage = int(str(max_joltage) + str(max_sub_joltage))
-    print(f"Max joltage: {max_joltage}, Max subsequence joltage: {max_sub_joltage}, Combined: {total_max_joltage}")
     return total_max_joltage
 
 if __name__ == "__main__":
