@@ -19,20 +19,20 @@ def move_right(position, value):
     return (position + value) % 100
     
 INITIAL_POSITION = 50
-inputs = read_inputs('day-1/inputs.txt')
+inputs = read_inputs('day_1/inputs.txt')
 inputs = process_data(inputs)
 
 zero_counts = 0
+position = INITIAL_POSITION 
 for direction, value in inputs:
-    print(f"Current position: {INITIAL_POSITION}, moving {direction}{value}")
+    print(f"Current position: {position}, moving {direction}{value}")
     if direction == 'L':
-        INITIAL_POSITION = move_left(INITIAL_POSITION, value)
-        print(f"Moved left to {INITIAL_POSITION}")
+        position = move_left(position, value)
+        print(f"Moved left to {position}")
     elif direction == 'R':
-        INITIAL_POSITION = move_right(INITIAL_POSITION, value)
-        print(f"Moved right to {INITIAL_POSITION}")
-    if INITIAL_POSITION == 0:
+        position = move_right(position, value)
+        print(f"Moved right to {position}")
+    if position == 0:
         zero_counts += 1
 
-# 245 too low
 print(f"Number of times position 0 was reached: {zero_counts}")
