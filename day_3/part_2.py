@@ -13,7 +13,6 @@ def find_largest_joltage(bank, num_switches=2):
         start_index = subsequence.index(max_joltage) + start_index + 1
         max_joltages.append(max_joltage)
     total_max_joltage = int(''.join(str(j) for j in max_joltages))
-    print("="*30)
 
     return total_max_joltage
 
