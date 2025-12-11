@@ -12,10 +12,12 @@ def process_data(grid):
 
 
 def search_neighbors(grid, x, y):
+    # All 8 posible directions around the point to search
     directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
     total = 0
     for dx, dy in directions:
         nx, ny = x + dx, y + dy
+        # Exclude out of bounds
         if 0 <= nx < len(grid) and 0 <= ny < len(grid[0]):
             total += grid[nx][ny]
     return total
@@ -28,11 +30,11 @@ for i in range(len(inputs)):
     row_results = []
     for j in range(len(inputs[0])):
         num_neighbors = search_neighbors(inputs, i, j)
+        # A roll can be accessed if it has less than 4 neighboring @ and is itself an @
         can_access = 1 if num_neighbors < 4 and inputs[i][j] == 1 else 0
         row_results.append(can_access)
     results.append(row_results)
 
 print(results)
-# Get the total
 total_accessible = sum(sum(row) for row in results)
 print(f"Total accessible locations: {total_accessible}")
