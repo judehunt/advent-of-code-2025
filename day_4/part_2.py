@@ -11,7 +11,7 @@ def process_data(grid):
 
 
 def search_neighbours(grid, x, y):
-    # All 8 posible directions around the point to search
+    # All 8 possible directions around the point to search
     directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
     total = 0
     for dx, dy in directions:
@@ -34,7 +34,9 @@ def remove_accessible_points(grid, num_free_neighbours: int = 4):
             num_neighbors = search_neighbours(grid, i, j)
             # A roll can be accessed if it has less than 4 neighboring @ and is itself an @
             # Only keep the inaccessible points
-            roll_left = 1 if num_neighbors >= 4 and grid[i][j] == 1 else 0
+            roll_left = (
+                1 if num_neighbors >= num_free_neighbours and grid[i][j] == 1 else 0
+            )
             row_results.append(roll_left)
         results.append(row_results)
     return results

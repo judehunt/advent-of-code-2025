@@ -11,8 +11,8 @@ def process_data(grid):
     return int_grid
 
 
-def search_neighbors(grid, x, y):
-    # All 8 posible directions around the point to search
+def search_neighbours(grid, x, y):
+    # All 8 possible directions around the point to search
     directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
     total = 0
     for dx, dy in directions:
@@ -29,7 +29,7 @@ results = []
 for i in range(len(inputs)):
     row_results = []
     for j in range(len(inputs[0])):
-        num_neighbors = search_neighbors(inputs, i, j)
+        num_neighbors = search_neighbours(inputs, i, j)
         # A roll can be accessed if it has less than 4 neighboring @ and is itself an @
         can_access = 1 if num_neighbors < 4 and inputs[i][j] == 1 else 0
         row_results.append(can_access)
