@@ -1,0 +1,56 @@
+def read_input(file_path):
+    with open(file_path, "r") as f:
+        input = [line.strip() for line in f.readlines()]
+    return input
+
+
+def split_input(input):
+    # Split on the blank line
+    split_index = input.index("")
+    part1 = input[:split_index]
+    part2 = input[split_index + 1 :]
+    return part1, part2
+
+
+def find_fresh_ingredients_from_range(fresh_ingredient_ranges):
+    fresh_ingredients = set()
+    for fresh_range in fresh_ingredient_ranges:
+        # Some of the ranges here are massive... Might be more efficient to compare the other way round
+        start, end = map(int, fresh_range.split("-"))
+        fresh_ingredients.update(i for i in range(start, end + 1))
+    return fresh_ingredients
+
+
+def filter_fresh_ingredients(ingredient_list, fresh_ingredients):
+    return [ing for ing in ingredient_list if int(ing) in fresh_ingredients]
+
+
+inputs = read_input("day_5/test.txt")
+# inputs = read_input("day_5/input.txt")
+print("Inputs read successfully.")
+fresh_ingredient_ranges, ingredient_list = split_input(inputs)
+print(
+    f"Split input into {len(fresh_ingredient_ranges)} fresh ingredient ranges and {len(ingredient_list)} ingredients."
+)
+
+# fresh_ingredients = find_fresh_ingredients_from_range(fresh_ingredient_ranges)
+# print(f"Identified {len(fresh_ingredients)} fresh ingredients.")
+# filtered_ingredients = filter_fresh_ingredients(ingredient_list, fresh_ingredients)
+# print(f"Filtered fresh ingredients: {filtered_ingredients}")
+# print(f"Total fresh ingredients: {len(filtered_ingredients)}")
+
+num_fresh_ingredients = 0
+for ingredient in ingredient_list:
+    ingredient_id = int(ingredient)
+    is_fresh = any(
+        int(range_start) <= ingredient_id <= int(range_end)
+        for fresh_range in fresh_ingredient_ranges
+        for range_start, range_end in [fresh_range.split("-")]
+    )
+    if is_fresh:
+        print(f"Fresh ingredient found: {ingredient_id}")
+        num_fresh_ingredients += 1
+
+print(f"Total fresh ingredients: {num_fresh_ingredients}")
+
+# Note: very inefficient due to list comprehensions, but it works for now
