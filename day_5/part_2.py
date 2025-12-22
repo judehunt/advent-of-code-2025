@@ -15,32 +15,35 @@ def split_input(input):
     return part1, part2
 
 
-def find_fresh_ingredients_from_range(fresh_ingredient_ranges):
-    num_fresh_ingredients = 0
-    for range_idx, fresh_range in enumerate(fresh_ingredient_ranges):
-        print(range_idx)
-        # Some of the ranges here are massive... Might be more efficient to compare the other way round
-        start, end = map(int, fresh_range.split("-"))
-        for i in range(start, end + 1):
-            # Check if this ingredient was already counted
-            # We don't want to keep a list of all found ingredients, so we can do this by checking previous ranges
-            print(len(fresh_ingredient_ranges[:range_idx]))
-            already_counted = any(
-                int(prev_start) <= i <= int(prev_end)
-                for prev_range in fresh_ingredient_ranges[:range_idx]
-                for prev_start, prev_end in [prev_range.split("-")]
-                if prev_range != fresh_range  # Don't compare with the same range
-            )
-            print(already_counted)
-            if not already_counted:
-                num_fresh_ingredients += 1
+def merge_ranges(ranges):
+    merged = []
+    for current in sorted(ranges, key=lambda x: int(x.split("-")[0])):
+        if not merged:
+            merged.append(current)
+        else:
+            last = merged[-1]
+            last_start, last_end = map(int, last.split("-"))
+            current_start, current_end = map(int, current.split("-"))
+            if current_start <= last_end + 1:  # Overlap or contiguous
+                merged[-1] = f"{last_start}-{max(last_end, current_end)}"
+            else:
+                merged.append(current)
+    return merged
 
+
+def find_fresh_ingredients_from_merged_ranges(fresh_ingredient_ranges):
+    # Merge overlapping ranges first to avoid double counting
+    merged_ranges = merge_ranges(fresh_ingredient_ranges)
+    num_fresh_ingredients = 0
+    for fresh_range in merged_ranges:
+        start, end = map(int, fresh_range.split("-"))
+        num_fresh_ingredients += end - start + 1
     return num_fresh_ingredients
 
-
-# inputs = read_input("day_5/test.txt")
 inputs = read_input("day_5/input.txt")
 fresh_ingredient_ranges, ingredient_list = split_input(inputs)
 
-num_fresh_ingredients = find_fresh_ingredients_from_range(fresh_ingredient_ranges)
+num_fresh_ingredients = find_fresh_ingredients_from_merged_ranges(
+    fresh_ingredient_ranges
+)
 print(f"Total fresh ingredients from ranges: {num_fresh_ingredients}")
