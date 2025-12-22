@@ -1,17 +1,14 @@
-from tqdm import tqdm
-
-
 def read_input(file_path):
     with open(file_path, "r") as f:
-        input = [line.strip() for line in f.readlines()]
-    return input
+        lines = [line.strip() for line in f.readlines()]
+    return lines
 
 
-def split_input(input):
+def split_input(lines):
     # Split on the blank line
-    split_index = input.index("")
-    part1 = input[:split_index]
-    part2 = input[split_index + 1 :]
+    split_index = lines.index("")
+    part1 = lines[:split_index]
+    part2 = lines[split_index + 1 :]
     return part1, part2
 
 
