@@ -7,7 +7,7 @@ def read_array(file_path):
         lines = f.readlines()
         array = []
         # The last row is a bunch of characters and spaces
-        # And the character is alwasy the first in that column, but the columns can have different numbers of digits
+        # And the character is always the first in that column, but the columns can have different numbers of digits
         # So we need to find where that column starts by where that character is in the line
         # Read the last line to find the positions of the characters
         last_line = lines[-1]
