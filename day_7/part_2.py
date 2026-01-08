@@ -17,22 +17,24 @@ def get_num_splits_in_row(row_input, row_splitter):
 
 def row_split(row_input, row_splitter):
     split_indices = [i for i, char in enumerate(row_splitter) if char == "^"]
-    assert 1 in row_input, "No beam in input row to split"
-    beam_index = row_input.index(1)
+    beam_value = max(row_input)
+    beam_index = row_input.index(beam_value)
 
     if beam_index not in split_indices or len(split_indices) == 0:
         return [row_input]
     else:
         # Return 1 version where it splits left, and 1 where it splits right
         left_split_row = [
-            1
-            if (i == beam_index - 1) or (row_input[i] == 1 and i not in split_indices)
+            beam_value
+            if (i == beam_index - 1)
+            or (row_input[i] == beam_value and i not in split_indices)
             else 0
             for i in range(len(row_input))
         ]
         right_split_row = [
-            1
-            if (i == beam_index + 1) or (row_input[i] == 1 and i not in split_indices)
+            beam_value
+            if (i == beam_index + 1)
+            or (row_input[i] == beam_value and i not in split_indices)
             else 0
             for i in range(len(row_input))
         ]
@@ -40,20 +42,33 @@ def row_split(row_input, row_splitter):
 
 
 inputs = read_input("day_7/input.txt")
-# inputs = read_input("day_7/test.txt")
 
 input_row = get_input_row(inputs)
-input_rows = [input_row]
 
 for i, line in enumerate(inputs[1:]):
     print(f"{i + 1}/{len(inputs) - 1}: {line}")
     output_rows = []
+
+    # Construct input rows - one for each possibility
+    # TODO: must be a cleaner way to do this...
+    input_rows = []
+    for idx, x in enumerate(input_row):
+        if x > 0:
+            input_rows.append(
+                [x_j if idx_j == idx else 0 for idx_j, x_j in enumerate(input_row)]
+            )
+
     for input_row in input_rows:
         possible_output_rows = row_split(input_row, line)
         output_rows.extend(possible_output_rows)
-    print(f"Number of output rows: {len(output_rows)}")
 
-    input_rows = output_rows
+    # Sum up the output rows to get total possibilities at each position
+    summed_output_row = [0] * len(output_rows[0])
+    for output_row in output_rows:
+        for i, val in enumerate(output_row):
+            summed_output_row[i] += val
+
+    input_row = summed_output_row
     print("=" * 30)
 
-print(f"Final possibilities: {len(output_rows)}")
+print(f"Final possibilities: {sum(input_row)}")
