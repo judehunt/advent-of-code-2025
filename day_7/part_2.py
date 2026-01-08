@@ -50,13 +50,11 @@ for i, line in enumerate(inputs[1:]):
     output_rows = []
 
     # Construct input rows - one for each possibility
-    # TODO: must be a cleaner way to do this...
-    input_rows = []
-    for idx, x in enumerate(input_row):
-        if x > 0:
-            input_rows.append(
-                [x_j if idx_j == idx else 0 for idx_j, x_j in enumerate(input_row)]
-            )
+    input_rows = [
+        [x if idx_j == idx else 0 for idx_j, x_j in enumerate(input_row)]
+        for idx, x in enumerate(input_row)
+        if x > 0
+    ]
 
     for input_row in input_rows:
         possible_output_rows = row_split(input_row, line)
